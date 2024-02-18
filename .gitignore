@@ -1,2 +1,4 @@
+nl-to-sql-mistral
 .env
 mistralenv
+*__pycache__

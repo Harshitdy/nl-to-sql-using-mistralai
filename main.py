@@ -2,15 +2,18 @@ from fastapi import FastAPI, HTTPException
 from langchain_together import Together
 from langchain.sql_database import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain
-import os
-from dotenv import load_dotenv
 from langchain.prompts import SemanticSimilarityExampleSelector
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+# from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+# from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.prompts import FewShotPromptTemplate
 from langchain.chains.sql_database.prompt import PROMPT_SUFFIX
 from langchain.prompts.prompt import PromptTemplate
 from few_shots import few_shots
+import uvicorn
+from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -26,6 +29,7 @@ def get_few_shot_db_chain():
     db_name = os.environ['DB_NAME']
 
     db = SQLDatabase.from_uri(f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}", sample_rows_in_table_info=3)
+    print(db.table_info)
 
     llm = Together(
         model="mistralai/Mixtral-8x7B-Instruct-v0.1",
@@ -78,8 +82,14 @@ def get_few_shot_db_chain():
 async def ask_question(question: str):
     try:
         chain = get_few_shot_db_chain()
-        answer = chain.interact(question)
-        return {"answer": answer}
+        answer = chain.invoke(question)
+        return answer
     except Exception as e:
         # Handle any errors that occur during interaction
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+
+if __name__ == "__main__":
+    uvicorn.run(app="main:app", host="0.0.0.0", port = 8000, reload = True)
