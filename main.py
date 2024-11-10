@@ -57,7 +57,6 @@ def get_few_shot_db_chain():
     SQLQuery: Query to run with no pre-amble
     SQLResult: Result of the SQLQuery
     Answer: Final answer here
-    
     No pre-amble.
     """
 
