@@ -28,5 +28,11 @@ few_shots = [
       "SQLQuery":"SELECT sum(stock_quantity) FROM t_shirts WHERE brand = 'Levi' AND color = 'White'",
       "SQLResult":"Result of the SQL query",
       "Answer":"238"
+   },
+   {
+      "Question":"How many red color Levi's shirt I have?",
+      "SQLQuery":"SELECT sum(stock_quantity) FROM t_shirts WHERE brand = 'Levi' AND color = 'red'",
+      "SQLResult":"Result of the SQL query",
+      "Answer":"202"
    }
 ]
